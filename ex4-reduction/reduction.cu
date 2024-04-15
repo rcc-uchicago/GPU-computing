@@ -215,11 +215,14 @@ void sum(int N, datafloat *h_u)
   datafloat psum = 0;
 
   for (int test = 0; test < Ntests; ++test) {
+    
+    partialSum <<< dim3(GDIM), dim3(BDIM) >>> (N, c_u, c_partialsum);
+
     // perform tree wise block reduction on DEVICE
     // unrolledPartialSum <<< dim3(GDIM), dim3(BDIM) >>> (N, c_u, c_partialsum);
   
     // use single barrier kernel
-    singleBarrierPartialSum <<< dim3(256,1,1), dim3(SIMT,SIMT,1) >>> (N, c_u, c_partialsum);
+    //singleBarrierPartialSum <<< dim3(256,1,1), dim3(SIMT,SIMT,1) >>> (N, c_u, c_partialsum);
    
     // copy array of partially summed values to HOST
     cudaMemcpy(h_partialsum, c_partialsum, GDIM*sizeof(datafloat), cudaMemcpyDeviceToHost);
