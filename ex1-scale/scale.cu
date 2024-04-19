@@ -41,20 +41,33 @@ int main(void) {
     h_x[i] = i;
   }
 
+  cudaError_t status;
+
   // Allocate the device input vector x
   float *d_x = NULL;
-  cudaMalloc((void **)&d_x, size);
+  status = cudaMalloc((void **)&d_x, size);
+  if (status != cudaSuccess) {
+    printf("error cudaMalloc: error code %d: %s\n", status, cudaGetErrorString(status));
+  }
 
   // Copy the host input vector x in host memory to the device input
   // vectors in device memory
-  cudaMemcpy(d_x, h_x, size, cudaMemcpyHostToDevice);
+  
+  status = cudaMemcpy(d_x, h_x, size, cudaMemcpyHostToDevice);
+  if (status != cudaSuccess) {
+    printf("error cudaMemcpy: error code %d: %s\n", status, cudaGetErrorString(status));
+  }
 
   // Launch the Vector Add CUDA Kernel
-  int threadsPerBlock = 256;
+  int threadsPerBlock = 16;
   int blocksPerGrid = (numElements + threadsPerBlock - 1) / threadsPerBlock;
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid,
          threadsPerBlock);
   scale<<<blocksPerGrid, threadsPerBlock>>>(d_x, k, numElements);
+  status = cudaGetLastError();
+  if (status != cudaSuccess) {
+    printf("error kernel launch: error code %d: %s\n", status, cudaGetErrorString(status));
+  }
 
   // Copy the device result vector in device memory to the host result vector
   // in host memory.
