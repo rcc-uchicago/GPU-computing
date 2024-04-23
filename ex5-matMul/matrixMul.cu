@@ -284,8 +284,8 @@ int main(int argc, char **argv)
 
   dimsA.x = atoi(argv[1]);
   dimsA.y = atoi(argv[2]);
-  dimsB.x = dimsA.y;
   dimsB.y = atoi(argv[3]);
+  dimsB.y = dimsA.x;
 
   if (dimsA.x != dimsB.y) {
     printf("Error: outer matrix dimensions must be equal. (%d != %d)\n",
