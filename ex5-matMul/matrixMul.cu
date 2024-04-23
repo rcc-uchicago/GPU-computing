@@ -186,7 +186,7 @@ int MatrixMultiply(int argc, char **argv,
   checkCudaErrors(cudaEventRecord(start, stream));
 
   // Execute the kernel
-  int nIter = 300;
+  int nIter = 10;
 
   for (int j = 0; j < nIter; j++) {
     if (block_size == 16) {
@@ -284,7 +284,7 @@ int main(int argc, char **argv)
   dim3 dimsB(5 * 4 * block_size, 5 * 2 * block_size, 1);
 
   if (argc != 5) {
-    printf("Need to specify the dims of the 2 matrices in the order: wA hA wB hB");
+    printf("Need to specify the dims of the 2 matrices in the order: wA hA wB hB\n");
     return 1;
   }
 
