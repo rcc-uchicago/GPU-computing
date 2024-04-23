@@ -283,15 +283,16 @@ int main(int argc, char **argv)
   dim3 dimsA(5 * 2 * block_size, 5 * 2 * block_size, 1);
   dim3 dimsB(5 * 4 * block_size, 5 * 2 * block_size, 1);
 
-  if (argc != 5) {
-    printf("Need to specify the dims of the 2 matrices in the order: wA hA wB hB\n");
+  if (argc != 4) {
+    printf("Need to specify the dims of the 2 matrices in the order: wA hA hB\n"
+      "All need to be multiplies of 32 for now.\n");
     return 1;
   }
 
   dimsA.x = atoi(argv[1]);
   dimsA.y = atoi(argv[2]);
-  dimsB.x = atoi(argv[3]);
-  dimsB.y = atoi(argv[4]);
+  dimsB.x = dimsA.y;
+  dimsB.y = atoi(argv[3]);
 
   if (dimsA.x != dimsB.y) {
     printf("Error: outer matrix dimensions must be equal. (%d != %d)\n",
