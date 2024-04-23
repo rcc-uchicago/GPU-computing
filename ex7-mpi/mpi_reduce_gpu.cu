@@ -1,3 +1,10 @@
+/*
+  module load openmpi cuda
+  export CUDA_PATH=$CUDA_HOME
+  export MPI_HOME=$OPENMPI_HOME
+  make
+*/
+
 #include <stdio.h>
 #include <mpi.h>
 __global__ void square(int *d)
