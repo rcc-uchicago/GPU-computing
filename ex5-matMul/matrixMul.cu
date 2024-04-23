@@ -20,8 +20,9 @@
 #include <assert.h>
 
 // CUDA runtime
-#include <cuda_runtime.h>
-#include <cuda_profiler_api.h>
+//#include <cuda_runtime.h>
+//#include <cuda_profiler_api.h>
+#define checkCudaErrors( func_call ) func_call
 
 // Helper functions and utilities to work with CUDA
 //#include <helper_functions.h>
