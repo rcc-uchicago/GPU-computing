@@ -270,48 +270,28 @@ int MatrixMultiply(int argc, char **argv,
 /**
  * Program main
  */
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   printf("[Matrix Multiply Using CUDA] - Starting...\n");
-
-  if (checkCmdLineFlag(argc, (const char **)argv, "help") ||
-      checkCmdLineFlag(argc, (const char **)argv, "?")) {
-    printf("Usage -device=n (n >= 0 for deviceID)\n");
-    printf("      -wA=WidthA -hA=HeightA (Width x Height of Matrix A)\n");
-    printf("      -wB=WidthB -hB=HeightB (Width x Height of Matrix B)\n");
-    printf("  Note: Outer matrix dimensions of A & B matrices" \
-           " must be equal.\n");
-
-    exit(EXIT_SUCCESS);
-  }
 
   // This will pick the best possible CUDA capable device, otherwise
   // override the device ID based on input provided at the command line
-  int dev = findCudaDevice(argc, (const char **)argv);
+  int dev = 0; //findCudaDevice(argc, (const char **)argv);
 
   int block_size = 32;
 
   dim3 dimsA(5 * 2 * block_size, 5 * 2 * block_size, 1);
   dim3 dimsB(5 * 4 * block_size, 5 * 2 * block_size, 1);
 
-  // width of Matrix A
-  if (checkCmdLineFlag(argc, (const char **)argv, "wA")) {
-    dimsA.x = getCmdLineArgumentInt(argc, (const char **)argv, "wA");
+  if (argc != 5) {
+    printf("Need to specify the dims of the 2 matrices in the order: wA hA wB hB");
+    return 1;
   }
 
-  // height of Matrix A
-  if (checkCmdLineFlag(argc, (const char **)argv, "hA")) {
-    dimsA.y = getCmdLineArgumentInt(argc, (const char **)argv, "hA");
-  }
-
-  // width of Matrix B
-  if (checkCmdLineFlag(argc, (const char **)argv, "wB")) {
-    dimsB.x = getCmdLineArgumentInt(argc, (const char **)argv, "wB");
-  }
-
-  // height of Matrix B
-  if (checkCmdLineFlag(argc, (const char **)argv, "hB")) {
-    dimsB.y = getCmdLineArgumentInt(argc, (const char **)argv, "hB");
-  }
+  dimsA.x = atoi(argv[1]);
+  dimsA.y = atoi(argv[2]);
+  dimsB.x = atoi(argv[3]);
+  dimsB.y = atoi(argv[4]);
 
   if (dimsA.x != dimsB.y) {
     printf("Error: outer matrix dimensions must be equal. (%d != %d)\n",
@@ -322,9 +302,9 @@ int main(int argc, char **argv) {
   printf("MatrixA(%d,%d), MatrixB(%d,%d)\n", dimsA.x, dimsA.y,
          dimsB.x, dimsB.y);
 
-  checkCudaErrors(cudaProfilerStart());
+  //checkCudaErrors(cudaProfilerStart());
   int matrix_result = MatrixMultiply(argc, argv, block_size, dimsA, dimsB);
-  checkCudaErrors(cudaProfilerStop());
+  //checkCudaErrors(cudaProfilerStop());
 
   exit(matrix_result);
 }
