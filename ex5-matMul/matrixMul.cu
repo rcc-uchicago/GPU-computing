@@ -20,13 +20,10 @@
 #include <assert.h>
 
 // CUDA runtime
-//#include <cuda_runtime.h>
-//#include <cuda_profiler_api.h>
+#include <cuda_runtime.h>
+#include <cuda_profiler_api.h>
 #define checkCudaErrors( func_call ) func_call
 
-// Helper functions and utilities to work with CUDA
-//#include <helper_functions.h>
-//#include <helper_cuda.h>
 
 /**
  * Matrix multiplication (CUDA Kernel) on the device: C = A * B
@@ -274,10 +271,6 @@ int main(int argc, char **argv)
 {
   printf("[Matrix Multiply Using CUDA] - Starting...\n");
 
-  // This will pick the best possible CUDA capable device, otherwise
-  // override the device ID based on input provided at the command line
-  int dev = 0; //findCudaDevice(argc, (const char **)argv);
-
   int block_size = 32;
 
   dim3 dimsA(5 * 2 * block_size, 5 * 2 * block_size, 1);
@@ -303,9 +296,9 @@ int main(int argc, char **argv)
   printf("MatrixA(%d,%d), MatrixB(%d,%d)\n", dimsA.x, dimsA.y,
          dimsB.x, dimsB.y);
 
-  //checkCudaErrors(cudaProfilerStart());
+  checkCudaErrors(cudaProfilerStart());
   int matrix_result = MatrixMultiply(argc, argv, block_size, dimsA, dimsB);
-  //checkCudaErrors(cudaProfilerStop());
+  checkCudaErrors(cudaProfilerStop());
 
   exit(matrix_result);
 }
