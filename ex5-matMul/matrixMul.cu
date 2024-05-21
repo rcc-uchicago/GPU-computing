@@ -165,7 +165,6 @@ int MatrixMultiplyCPU(int argc, char **argv,
   }
   float msecTotal = (float)(clock() - start)/CLOCKS_PER_SEC;
   
-
   // Compute and print the performance
   float msecPerMatrixMul = msecTotal / nIter;
   double flopsPerMatrixMul = 2.0 * static_cast<double>(dimsA.x) *
