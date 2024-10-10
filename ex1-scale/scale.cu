@@ -13,11 +13,11 @@
  *
  * Multiplies all the elements of vector x by a scalar value
  */
-__global__ void scale(float *x, const float k, int numElements) {
-  int i = blockDim.x * blockIdx.x + threadIdx.x;
+__global__ void scale(float *x, const float k, const int N) {
+  int tid = threadIdx.x + blockDim.x * blockIdx.x;
 
-  if (i < numElements) {
-    x[i] = x[i] * k;
+  if (tid < N) {
+    x[tid] = x[tid] * k;
   }
 }
 
@@ -51,7 +51,7 @@ int main(void) {
   cudaMemcpy(d_x, h_x, size, cudaMemcpyHostToDevice);
 
   // Launch the Vector Add CUDA Kernel
-  int threadsPerBlock = 16;
+  int threadsPerBlock = 256;
   int blocksPerGrid = (numElements + threadsPerBlock - 1) / threadsPerBlock;
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid,
          threadsPerBlock);

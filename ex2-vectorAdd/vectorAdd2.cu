@@ -31,7 +31,7 @@ __global__ void vectorAdd(const float *A, const float *B, float *C,
 }
 
 /**
- * Host main routine
+ * Host main routine: vectorAdd2.cu requires 3 command-line arguments: numElements, block_size, and num_runs
  */
 int main(int argc, char** argv)
 {
